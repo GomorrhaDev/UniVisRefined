@@ -1,2 +1,2 @@
-# UniVisRefined
-An attempt to finally make UniVis usable
+# UnivISRefined
+An attempt to finally make UnivIS usable
