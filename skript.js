@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UnivIS Refined
 // @namespace    https://gomorrha.dev
-// @version      1.2
+// @version      1.3
 // @author       gmrrh
 // @description  A refined version of UnivIS with Material Design
 // @match        https://univis.uni-luebeck.de/*
@@ -9,17 +9,17 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
+    "use strict";
 
-    const primaryColor = '#4CAF50'; // Grün
-    const secondaryColor = '#A5D6A7'; // Helles Grün
-    const textColor = '#ffffff'; // Weiß
+    const primaryColor = "#4CAF50"; // Grün
+    const secondaryColor = "#A5D6A7"; // Helles Grün
+    const textColor = "#ffffff"; // Weiß
 
     GM_addStyle(`
         @import url("https://code.getmdl.io/1.3.0/material.indigo-teal.min.css");
         @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
         body {
-            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.5)), url("https://moodle.uni-luebeck.de/pluginfile.php/1/theme_boost_union/loginbackgroundimage/0/uzl24_s.jpg") no-repeat center center fixed;
+            background: url("https://moodle.uni-luebeck.de/pluginfile.php/1/theme_boost_union/loginbackgroundimage/0/uzl24_s.jpg") no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             color: ${textColor}; /* Textfarbe */
@@ -50,26 +50,49 @@
         }
     `);
 
-    function removeWhiteBgcolor() {
-        const elements = document.querySelectorAll('*');
+    function removeBgcolor() {
+        const elements = document.querySelectorAll("*");
         elements.forEach(element => {
-            if (element.getAttribute('bgcolor') === '#ffffff' || element.getAttribute('bgcolor') === '#eeeeee') {
-                element.removeAttribute('bgcolor');
+            if (element.getAttribute("bgcolor") === "#ffffff" || element.getAttribute("bgcolor") === "#eeeeee" || element.getAttribute("bgcolor") === "#000000" || element.getAttribute("bgcolor") === "#cccccc") {
+                element.removeAttribute("bgcolor");
             }
         });
     }
 
-    removeWhiteBgcolor();
 
-    // UnivIS Logo entfernen
-    const logo = document.querySelector('img[src="/img/anew/univis_96_20.gif"]');
-    if (logo) {
-        logo.remove();
+    function changeBlackTextColor() {
+        const elements = document.querySelectorAll("*");
+
+        elements.forEach(element => {
+
+            const computedStyle = window.getComputedStyle(element);
+            const color = computedStyle.color;
+
+            if (color === "#000000") {
+                element.style.color = textColor;
+            }
+        });
     }
 
+
+    function updateUniLink() {
+        const link = document.querySelector('a[href="http://www.uni-luebeck.de/"]');
+        if (link) {
+            link.href = 'https://univis.uni-luebeck.de/';
+        }
+    }
+
+    //Lets do it!!!
+    removeBgcolor();
+    changeBlackTextColor()
+    updateUniLink()
+
+
+
+
     // Seitenleiste
-    const sidebar = document.createElement('div');
-    sidebar.className = 'mdl-layout__drawer custom-sidebar';
+    const sidebar = document.createElement("div");
+    sidebar.className = "mdl-layout__drawer custom-sidebar";
     sidebar.innerHTML = `
         <h2 class="mdl-typography--headline">Navigation</h2>
         <ul class="mdl-list">
@@ -95,33 +118,33 @@
     document.body.appendChild(sidebar);
 
     // Floating Button zum Ausklappen
-    const toggleButton = document.createElement('button');
-    toggleButton.className = 'mdl-button mdl-js-button mdl-button--fab mdl-button--colored';
-    toggleButton.innerHTML = '☰';
-    toggleButton.style.position = 'fixed';
-    toggleButton.style.bottom = '20px';
-    toggleButton.style.left = '20px';
-    toggleButton.style.zIndex = '1001';
-    toggleButton.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+    const toggleButton = document.createElement("button");
+    toggleButton.className = "mdl-button mdl-js-button mdl-button--fab mdl-button--colored";
+    toggleButton.innerHTML = "☰";
+    toggleButton.style.position = "fixed";
+    toggleButton.style.bottom = "20px";
+    toggleButton.style.left = "20px";
+    toggleButton.style.zIndex = "1001";
+    toggleButton.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
     document.body.appendChild(toggleButton);
 
     let isSidebarOpen = false;
     toggleButton.onclick = function() {
         if (isSidebarOpen) {
-            sidebar.style.transform = 'translateX(-100%)'; // Sidebar ausblenden
-            toggleButton.innerHTML = '☰';
+            sidebar.style.transform = "translateX(-100%)"; // Sidebar ausblenden
+            toggleButton.innerHTML = "☰";
         } else {
-            sidebar.style.transform = 'translateX(0)'; // Sidebar einblenden
-            toggleButton.innerHTML = '-';
+            sidebar.style.transform = "translateX(0)"; // Sidebar einblenden
+            toggleButton.innerHTML = "-";
         }
         isSidebarOpen = !isSidebarOpen;
     };
 
-    sidebar.style.position = 'fixed';
-    sidebar.style.transform = 'translateX(-100%)';
-    sidebar.style.top = '0';
-    sidebar.style.width = '250px';
-    sidebar.style.height = '100%';
-    sidebar.style.transition = 'transform 0.3s ease';
-    sidebar.style.zIndex = '1000';
+    sidebar.style.position = "fixed";
+    sidebar.style.transform = "translateX(-100%)";
+    sidebar.style.top = "0";
+    sidebar.style.width = "250px";
+    sidebar.style.height = "100%";
+    sidebar.style.transition = "transform 0.3s ease";
+    sidebar.style.zIndex = "1000";
 })();
